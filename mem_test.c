@@ -7,6 +7,7 @@
 #ifdef SYSTEM_MALLOC
 #define modFree free
 #define modMalloc malloc
+#define modRealloc realloc
 #else
 #include "malloc.h"
 #endif
@@ -63,5 +64,24 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "[%d] freed %p\n", ix, ptrs[ix]);
     }
 
+
+    fprintf(stderr, "Testing modRealloc\n");
+    char *ptr = (char *)modMalloc(10);
+    if (ptr == NULL) {
+        fprintf(stderr, "malloc failed\n");
+        exit(1);
+    }
+    fprintf(stderr, "ptr: %p (%d)\n", ptr, *ptr);
+
+    char *new_ptr = (char *)modRealloc(ptr, 20);
+    if (new_ptr == NULL) {
+        fprintf(stderr, "realloc failed\n");
+        exit(1);
+    }
+    fprintf(stderr, "new_ptr: %p (%d)\n", new_ptr, *new_ptr);
+
+    modFree(new_ptr);
+
+    fprintf(stderr, "Test passed\n");
     return 0;
 }

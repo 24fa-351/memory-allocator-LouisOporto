@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "malloc.h"
 
@@ -57,17 +58,22 @@ void* modMalloc(size_t size) {
     block = sbrk(size);
 }
 
-
-
 void* modRealloc(void* ptr, size_t size) {
-    void* newPtr = realloc(ptr, size);  // Implement this
-    if (newPtr == NULL) {
-        fprintf(stderr, __FILE__ ":%d realloc failed\n", __LINE__);
-        exit(1);
+    header_t *header;
+    void *ret;
+    if (!ptr || !size) {
+        return NULL;
     }
-    fprintf(stderr, __FILE__ ":%d: realloc(%p, %lu) = %p\n", __LINE__, ptr,
-            size, newPtr);
-    return newPtr;
+    header = (header_t*)ptr - 1;
+    if (header->s.size >= size) {
+        return ptr;
+    }
+    ret = modMalloc(size);
+    if (ret) {
+        memcpy(ret, ptr, header->s.size);
+        modFree(ptr);
+    }
+    return ret;
 }
 
 void modFree(void* ptr) {
