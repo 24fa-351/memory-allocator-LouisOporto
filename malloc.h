@@ -1,10 +1,10 @@
 #ifndef MALLOC_H
 #define MALLOC_H
 
-#include <stdlib.h>
 #include <pthread.h>
+#include <stdlib.h>
 
-typedef char ALIGN[16]; // 16-byte alignment
+typedef char ALIGN[16];  // 16-byte alignment
 
 // Define memory block structure
 union header {
@@ -18,7 +18,7 @@ union header {
 typedef union header header_t;
 
 // Define memory interface
-void *modMalloc(size_t size);  // malloc reset allocated blocks to 0
+void* modMalloc(size_t size);  // malloc reset allocated blocks to 0
 
 void modFree(void* ptr);
 

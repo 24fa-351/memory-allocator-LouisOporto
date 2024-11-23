@@ -64,7 +64,6 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "[%d] freed %p\n", ix, ptrs[ix]);
     }
 
-
     fprintf(stderr, "Testing modRealloc\n");
     char *ptr = (char *)modMalloc(10);
     if (ptr == NULL) {
